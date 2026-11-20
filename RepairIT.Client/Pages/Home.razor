@@ -1,0 +1,42 @@
+@page "/"
+@inject IConfiguration Configuration
+
+<PageTitle>Accueil · RepairIT</PageTitle>
+
+<header class="ri-header">
+    <h1>Bienvenue sur RepairIT</h1>
+    <p>Vente et réparation d'ordinateurs : catalogue, réparations, ventes et suivi de l'activité.</p>
+</header>
+
+<section class="ri-grid">
+    @foreach (var module in _modules)
+    {
+        <article class="ri-card">
+            <div class="ri-card-head">
+                <h2>@module.Nom</h2>
+                <span class="ri-badge @(module.Disponible ? "ok" : null)">@module.Version</span>
+            </div>
+            <p>@module.Description</p>
+            @if (module.CleService is not null)
+            {
+                @* Les APIs de la V1 se testent via Swagger en attendant leur intégration au front (V4) *@
+                <a class="ri-link" href="@($"{Configuration[$"Services:{module.CleService}"]}/swagger")" target="_blank">Ouvrir l'API (Swagger)</a>
+            }
+        </article>
+    }
+</section>
+
+@code {
+    /// <summary>Un module fonctionnel de l'application et la version qui le livre.</summary>
+    private record Module(string Nom, string Description, string Version, bool Disponible, string? CleService = null);
+
+    private readonly Module[] _modules =
+    [
+        new("Catalogue", "Ajout, consultation, modification et suppression des ordinateurs.", "V1", true, "Catalogue"),
+        new("Utilisateurs", "Création et consultation des comptes gestionnaires et administrateurs.", "V1", true, "Utilisateurs"),
+        new("Clients & réparations", "Suivi des clients et des interventions techniques.", "V2", false),
+        new("Ventes", "Enregistrement des ventes, chiffre d'affaires et top produits.", "V3", false),
+        new("Tableau de bord", "Indicateurs de l'activité et navigation complète.", "V4", false),
+        new("Sécurité", "Authentification déléguée à Keycloak et rôles.", "V5", false)
+    ];
+}

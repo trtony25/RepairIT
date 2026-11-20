@@ -1,0 +1,32 @@
+@* Menu principal demandé par le sujet. Les entrées sans contenu en V1 mènent vers une page
+   qui indique la version dans laquelle la fonctionnalité sera livrée. *@
+<aside class="ri-sidebar @(_menuOuvert ? "ouvert" : null)">
+    <div class="ri-brand">
+        <span class="ri-logo">RI</span>
+        <span>Repair<strong>IT</strong></span>
+        <button class="ri-burger" title="Menu" @onclick="BasculerMenu">☰</button>
+    </div>
+
+    <nav class="ri-nav" @onclick="FermerMenu">
+        <NavLink href="" Match="NavLinkMatch.All">Accueil</NavLink>
+        <NavLink href="ordinateurs">Ordinateurs</NavLink>
+        <NavLink href="reparations">Réparations</NavLink>
+        <NavLink href="ventes">Ventes</NavLink>
+        <NavLink href="tableau-de-bord">Tableau de bord</NavLink>
+        <NavLink href="administration">Administration</NavLink>
+    </nav>
+
+    @* Pas de page de connexion maison : l'authentification sera déléguée à Keycloak (V5) *@
+    <div class="ri-connexion" title="Connexion via la page Keycloak, disponible en V5">
+        Connexion <span class="ri-badge">V5</span>
+    </div>
+</aside>
+
+@code {
+    // Sur petit écran le menu est replié derrière le bouton "burger"
+    private bool _menuOuvert;
+
+    private void BasculerMenu() => _menuOuvert = !_menuOuvert;
+
+    private void FermerMenu() => _menuOuvert = false;
+}
