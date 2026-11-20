@@ -1,0 +1,9 @@
+@page "/ordinateurs"
+@inject IConfiguration Configuration
+
+@* Le CRUD des ordinateurs existe côté API dès la V1 ; son écran arrive avec l'intégration du front (V4) *@
+<PageAVenir Titre="Ordinateurs" Version="V4" Description="Catalogue des ordinateurs et état du stock.">
+    <p>L'API du catalogue est déjà opérationnelle :
+        <a class="ri-link" href="@($"{Configuration["Services:Catalogue"]}/swagger")" target="_blank">tester le CRUD via Swagger</a>.
+    </p>
+</PageAVenir>

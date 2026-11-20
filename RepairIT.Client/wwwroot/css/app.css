@@ -1,0 +1,206 @@
+/* Feuille de style de RepairIT : thème propre au projet (pas l'interface Blazor par défaut). */
+
+:root {
+    --ri-primaire: #1d4ed8;
+    --ri-primaire-clair: #06b6d4;
+    --ri-accent: #1d4ed8;
+    --ri-accent-doux: #dbeafe;
+    --ri-accent-texte: #1e40af;
+    --ri-vert: #047857;
+    --ri-fond: #f8fafc;
+    --ri-carte: #ffffff;
+    --ri-texte: #0f172a;
+    --ri-texte-doux: #64748b;
+    --ri-bordure: #e2e8f0;
+    --ri-rayon: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    background: var(--ri-fond);
+    color: var(--ri-texte);
+}
+
+h1:focus { outline: none; }
+
+/* ---------- Structure : menu latéral + contenu ---------- */
+.ri-shell { display: flex; min-height: 100vh; }
+
+.ri-main { flex: 1; padding: 2.5rem 3rem; max-width: 1200px; }
+
+.ri-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-right: 1px solid var(--ri-bordure);
+    color: var(--ri-texte);
+    padding: 1.5rem 1rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.ri-brand {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    font-size: 1.35rem;
+    padding: 0 .5rem 1.5rem;
+}
+
+.ri-brand strong { color: var(--ri-primaire-clair); }
+
+.ri-logo {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ri-primaire), var(--ri-primaire-clair));
+    color: #fff;
+    font-weight: 700;
+}
+
+.ri-burger {
+    display: none;
+    margin-left: auto;
+    background: none;
+    border: 0;
+    color: inherit;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.ri-nav { display: flex; flex-direction: column; gap: .25rem; }
+
+.ri-nav a {
+    color: #475569;
+    text-decoration: none;
+    padding: .7rem .9rem;
+    border-radius: 8px;
+    transition: background .15s, color .15s;
+}
+
+.ri-nav a:hover { background: #f1f5f9; color: var(--ri-primaire); }
+
+.ri-nav a.active {
+    background: var(--ri-primaire);
+    color: #fff;
+    font-weight: 600;
+}
+
+.ri-connexion {
+    margin-top: auto;
+    padding: .8rem .9rem;
+    border-top: 1px solid var(--ri-bordure);
+    color: var(--ri-texte-doux);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ---------- Contenu ---------- */
+.ri-header { margin-bottom: 2rem; }
+.ri-header h1 { margin: 0 0 .4rem; font-size: 2rem; color: var(--ri-primaire); }
+.ri-header p { margin: 0; color: var(--ri-texte-doux); }
+
+.ri-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+.ri-card {
+    background: var(--ri-carte);
+    border: 1px solid var(--ri-bordure);
+    border-radius: var(--ri-rayon);
+    padding: 1.4rem;
+    border-top: 3px solid var(--ri-primaire);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .06);
+}
+
+.ri-card p { color: var(--ri-texte-doux); line-height: 1.5; }
+.ri-card-head { display: flex; justify-content: space-between; align-items: center; }
+.ri-card-head h2 { margin: 0; font-size: 1.15rem; }
+
+.ri-a-venir { max-width: 640px; border-top: 0; border-left: 5px solid var(--ri-primaire-clair); }
+
+.ri-badge {
+    font-size: .75rem;
+    font-weight: 700;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    background: var(--ri-accent-doux);
+    color: var(--ri-accent-texte);
+}
+
+.ri-badge.ok { background: #dcfce7; color: var(--ri-vert); }
+
+.ri-link { color: var(--ri-accent); font-weight: 600; text-decoration: none; }
+.ri-link:hover { text-decoration: underline; }
+
+/* ---------- Petit écran : menu repliable ---------- */
+@media (max-width: 800px) {
+    .ri-shell { flex-direction: column; }
+    .ri-sidebar { width: 100%; height: auto; position: static; padding: 1rem; }
+    .ri-brand { padding-bottom: 0; }
+    .ri-burger { display: block; }
+    .ri-nav, .ri-connexion { display: none; }
+    .ri-sidebar.ouvert .ri-nav { display: flex; margin-top: 1rem; }
+    .ri-main { padding: 1.5rem 1rem; }
+}
+
+/* ---------- Éléments techniques Blazor (chargement, erreurs) ---------- */
+#blazor-error-ui {
+    background: #fef3c7;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, .2);
+    display: none;
+    left: 0;
+    padding: .6rem 1.25rem .7rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss { cursor: pointer; position: absolute; right: .75rem; top: .5rem; }
+
+.blazor-error-boundary { background: #b32121; padding: 1rem; color: white; }
+.blazor-error-boundary::after { content: "Une erreur est survenue."; }
+
+.loading-progress {
+    position: absolute;
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    inset: 20vh 0 auto 0;
+    margin: 0 auto;
+}
+
+.loading-progress circle {
+    fill: none;
+    stroke: var(--ri-bordure);
+    stroke-width: .6rem;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg);
+}
+
+.loading-progress circle:last-child {
+    stroke: var(--ri-accent);
+    stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+    transition: stroke-dasharray .05s ease-in-out;
+}
+
+.loading-progress-text {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    inset: calc(20vh + 3.25rem) 0 auto .2rem;
+}
+
+.loading-progress-text:after { content: var(--blazor-load-percentage-text, "Chargement"); }

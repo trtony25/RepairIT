@@ -1,0 +1,63 @@
+# Intégration continue de RepairIT (CI uniquement, aucun déploiement) :
+# restauration, compilation, tests unitaires, calcul et publication de la couverture de code.
+name: CI
+
+# Exécuté sur chaque commit poussé (toutes les branches) et sur chaque Pull Request
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restauration des dépendances
+        run: dotnet restore RepairIT.slnx
+
+      - name: Compilation
+        run: dotnet build RepairIT.slnx --no-restore --configuration Release
+
+      - name: Tests unitaires et collecte de la couverture
+        run: >
+          dotnet test RepairIT.slnx --no-build --configuration Release
+          --settings coverlet.runsettings
+          --collect:"XPlat Code Coverage"
+          --results-directory TestResults
+          --logger "trx;LogFileName=resultats.trx"
+
+      - name: Génération du rapport de couverture
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+          reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:CoverageReport -reporttypes:"Html;MarkdownSummaryGithub;Cobertura;TextSummary"
+
+      # Affiche le résumé de couverture directement sur la page de l'exécution GitHub Actions
+      - name: Publication de la couverture dans le résumé
+        run: |
+          cat CoverageReport/Summary.txt
+          cat CoverageReport/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+
+      # Le projet exige au moins 50 % de couverture : en dessous, la CI échoue
+      - name: Vérification du seuil de couverture (50 %)
+        run: |
+          taux=$(grep -o 'line-rate="[0-9.]*"' CoverageReport/Cobertura.xml | head -1 | grep -o '[0-9.]*')
+          pourcentage=$(awk -v t="$taux" 'BEGIN { printf "%.1f", t * 100 }')
+          echo "Couverture des lignes : $pourcentage %"
+          echo "**Couverture des lignes : $pourcentage % (minimum exigé : 50 %)**" >> "$GITHUB_STEP_SUMMARY"
+          awk -v t="$taux" 'BEGIN { exit (t >= 0.5) ? 0 : 1 }' || { echo "::error::Couverture insuffisante ($pourcentage % < 50 %)"; exit 1; }
+
+      - name: Archivage du rapport de couverture
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-couverture
+          path: CoverageReport

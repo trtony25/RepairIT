@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="RepairIT.AuthentificationService/RepairIT.AuthentificationService.csproj" />
+  <Project Path="RepairIT.CatalogService/RepairIT.CatalogService.csproj" />
+  <Project Path="RepairIT.Client/RepairIT.Client.csproj" />
+  <Project Path="RepairIT.RepairService/RepairIT.RepairService.csproj" />
+  <Project Path="RepairIT.SalesService/RepairIT.SalesService.csproj" />
+  <Project Path="RepairIT.Shared/RepairIT.Shared.csproj" />
+  <Project Path="RepairIT.Tests/RepairIT.Tests.csproj" />
+  <Project Path="RepairIT.UserService/RepairIT.UserService.csproj" />
+</Solution>

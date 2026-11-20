@@ -1,0 +1,25 @@
+@* Page d'attente commune aux rubriques dont le contenu sera livré dans une version ultérieure *@
+<PageTitle>@Titre · RepairIT</PageTitle>
+
+<header class="ri-header">
+    <h1>@Titre</h1>
+    <p>@Description</p>
+</header>
+
+<section class="ri-card ri-a-venir">
+    <span class="ri-badge">@Version</span>
+    <p>Cette rubrique sera disponible dans la <strong>version @Version.TrimStart('V')</strong> de RepairIT.</p>
+    @ChildContent
+</section>
+
+@code {
+    [Parameter, EditorRequired] public string Titre { get; set; } = string.Empty;
+
+    [Parameter, EditorRequired] public string Description { get; set; } = string.Empty;
+
+    /// <summary>Version du projet qui livrera la rubrique (ex. "V2").</summary>
+    [Parameter, EditorRequired] public string Version { get; set; } = string.Empty;
+
+    /// <summary>Informations complémentaires facultatives.</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}
